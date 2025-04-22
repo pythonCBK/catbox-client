@@ -1,0 +1,435 @@
+MDScreenManager:
+    
+
+    ## == Catbox Screen == ##
+    MDScreen:
+        name: 'catbox'
+        md_bg_color: self.theme_cls.backgroundColor
+        #md_bg_color: "#FFDAAF"
+
+        ## Top bar
+        MDTopAppBar:
+            type: 'small'
+            size_hint_y: 0.1
+            pos_hint: {"center_x": 0.5, "top": 1}
+
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: 'menu'
+                    on_release: drawer_c.set_state("toggle")
+
+            MDTopAppBarTitle:
+                pos_hint: {"center_x": 0.5}
+                text: "Catbox Uploader"
+
+            MDTopAppBarTrailingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: 'theme-light-dark'
+                    on_release: app.switch_theme()
+
+                MDActionTopAppBarButton:
+                    icon: 'cog'
+                    on_release:
+                        app.last_screen()
+                        root.transition.direction = "left"
+                        root.current = "settings"
+
+        MDDivider:
+            thickness: dp(10)
+            pos_hint: {"center_x": 0.5, "top": 0.9}
+            size_hint_x: 1
+
+        MDDivider:
+            thickness: dp(10)
+            pos_hint: {"center_x": 0.5, "top": 0.899}
+            size_hint_x: 1
+        
+        ## Image, info and divider
+        AsyncImage:
+            size: "200dp", "200dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.675}
+            source: "https://catbox.moe/pictures/qts/1450722871010.png"
+
+        MDLabel:
+            text: 'Drop your files into the Catbox cloud\nUploads up to 200 MB are allowed'
+            pos_hint: {"center_x": 0.5, "center_y": 0.425}
+            halign: 'center'
+            padding: dp(30)
+            font_style: 'Title'
+            role: 'medium'
+
+        MDDivider:
+            thickness: dp(6)
+            pos_hint: {"center_x": 0.5, "center_y": 0.375}
+            size_hint_x: 0.95
+
+
+        ## Method select
+        MDSegmentedButton:
+            padding: dp(10)
+            pos_hint: {"center_x": 0.5, "center_y": 0.3}
+            
+            MDSegmentedButtonItem:
+                active: True
+                on_release: app.method_upd('anon')
+                MDSegmentButtonIcon:
+                    icon: 'incognito-circle'
+                MDSegmentButtonLabel:
+                    text: 'Anonymous'
+
+            MDSegmentedButtonItem:
+                on_release: app.method_upd('auth')
+                MDSegmentButtonIcon:
+                    icon: 'account'
+                MDSegmentButtonLabel:
+                    text: 'Authorized'
+        
+        ## File select
+        MDButton:
+            id: file_cb
+            style: 'outlined'
+            pos_hint: {"center_x": 0.5, "center_y": 0.2}
+            on_press: app.file_manager_open()
+            MDButtonText:
+                text: 'Select file'
+            MDButtonIcon:
+                icon: 'folder'
+        
+        ## Upload button
+        MDButton:
+            id: upload_cb
+            style: 'elevated'
+            pos_hint: {"center_x": 0.5, "center_y": 0.12}
+            font_size: "20sp"
+            on_release: app.upload_cb()
+            
+            MDButtonText:
+                text: 'Upload to Catbox'
+            MDButtonIcon:
+                icon: 'upload-box'
+
+
+
+        ## Attention label
+        MDLabel:
+            text: 'By uploading files you agree with the current Catbox rules'
+            padding: dp(10)
+            halign: 'center'
+            pos_hint: {"center_x": 0.5, "center_y": 0.025}
+            font_style: 'Body'
+            role: 'small'
+
+
+        ## NavigationDrawer
+        MDNavigationLayout:
+
+            MDNavigationDrawer:
+                id: drawer_c
+                radius: 0, 0, 0, 0
+                size_hint_x: 0.8
+                
+                MDNavigationDrawerMenu:
+                    id: menu_cb
+
+                    ## Switch to LB
+                    MDNavigationDrawerItem:
+                        on_release:
+                            root.transition.direction = "up"
+                            root.current = "litterbox"
+                            app.current_screen_upd()
+                            drawer_c.set_state("close")
+
+                        MDNavigationDrawerItemLeadingIcon:
+                            icon: "swap-horizontal"
+
+                        MDNavigationDrawerItemText:
+                            text: "Switch to Litterbox"
+
+                    ## Divider
+                    MDNavigationDrawerDivider:
+
+                    ## SegmentedButton
+                    MDSegmentedButton:
+                        padding: dp(10)
+                        pos_hint: {"center_x": 0.5}
+                        MDSegmentedButtonItem:
+                            active: True
+                            on_release:
+                                app.list_choice_upd('anon'),
+                                app.add_cb_a()
+                            MDSegmentButtonLabel:
+                                text: 'Anonymous'
+                        MDSegmentedButtonItem:
+                            on_release:
+                                app.list_choice_upd('anon'),
+                                app.add_cb_b()
+                            MDSegmentButtonLabel:
+                                text: 'Authorized'
+
+
+
+
+
+
+
+    ## == Litterbox Screen == ##
+    MDScreen:
+        name: 'litterbox'
+        md_bg_color: self.theme_cls.backgroundColor
+        #md_bg_color: "#FFDAAF"
+
+        ## Top bar
+        MDTopAppBar:
+            type: 'small'
+            size_hint_y: 0.1
+            pos_hint: {"center_x": 0.5, "top": 1}
+
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: 'menu'
+                    on_release: drawer_l.set_state("toggle")
+
+            MDTopAppBarTitle:
+                pos_hint: {"center_x": 0.5}
+                text: "Litterbox Uploader"
+
+            MDTopAppBarTrailingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: 'theme-light-dark'
+                    on_release: app.switch_theme()
+
+                MDActionTopAppBarButton:
+                    icon: 'cog'
+                    on_release:
+                        app.last_screen()
+                        root.transition.direction = "left"
+                        root.current = "settings"
+
+        MDDivider:
+            thickness: dp(10)
+            pos_hint: {"center_x": 0.5, "top": 0.9}
+            size_hint_x: 1
+
+        MDDivider:
+            thickness: dp(10)
+            pos_hint: {"center_x": 0.5, "top": 0.899}
+            size_hint_x: 1
+        
+        ## Image, info and divider
+        AsyncImage:
+            size: "100dp", "100dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.675}
+            source: "https://litterbox.catbox.moe/resources/qts/1458602218407.png"
+
+        MDLabel:
+            text: 'Use Litterbox for temporary uploads\nUploads up to 1 GB are allowed'
+            pos_hint: {"center_x": 0.5, "center_y": 0.425}
+            halign: 'center'
+            padding: dp(30)
+            font_style: 'Title'
+            role: 'medium'
+
+        MDDivider:
+            thickness: dp(6)
+            pos_hint: {"center_x": 0.5, "center_y": 0.375}
+            size_hint_x: 0.95
+
+
+        ## Time choise
+        MDSegmentedButton:
+            padding: dp(10)
+            pos_hint: {"center_x": 0.5, "center_y": 0.3}
+            
+            MDSegmentedButtonItem:
+                active: True
+                on_release:
+                    app.period_upd('1h')
+                MDSegmentButtonLabel:
+                    text: '1 Hour'
+
+            MDSegmentedButtonItem:
+                on_release:
+                    app.period_upd('12h')
+                MDSegmentButtonLabel:
+                    text: '12 Hour'
+
+            MDSegmentedButtonItem:
+                on_release:
+                    app.period_upd('24h')
+                MDSegmentButtonLabel:
+                    text: '1 Day'
+
+            MDSegmentedButtonItem:
+                on_release:
+                    app.period_upd('72h')
+                MDSegmentButtonLabel:
+                    text: '3 Days'
+
+        ## File select
+        MDButton:
+            id: file_lb
+            style: 'outlined'
+            pos_hint: {"center_x": 0.5, "center_y": 0.2}
+            on_press: app.file_manager_open()
+            MDButtonText:
+                text: 'Select file'
+            MDButtonIcon:
+                icon: 'folder'
+        
+        ## Upload button
+        MDButton:
+            id: upload_lb
+            style: 'elevated'
+            pos_hint: {"center_x": 0.5, "center_y": 0.12}
+            font_size: "20sp"
+            on_release: app.call_upload_lb()
+
+            MDButtonText:
+                text: 'Upload to Litterbox'
+            MDButtonIcon:
+                icon: 'upload-box'
+
+        ## Attention label
+        MDLabel:
+            text: 'By uploading files you agree with the current Litterbox rules'
+            padding: dp(10)
+            halign: 'center'
+            pos_hint: {"center_x": 0.5, "center_y": 0.025}
+            font_style: 'Body'
+            role: 'small'
+
+        ## NavigationDrawer
+        MDNavigationLayout:
+            
+            MDNavigationDrawer:
+                id: drawer_l
+                radius: 0, 0, 0, 0
+                size_hint_x: 0.85
+                
+                MDNavigationDrawerMenu:
+                    id: menu_lb
+
+                    ## Switch to CB
+                    MDNavigationDrawerItem:
+                        on_release:
+                            root.transition.direction = "down"
+                            root.current = "catbox"
+                            app.current_screen_upd()
+                            drawer_l.set_state("close")
+
+                        MDNavigationDrawerItemLeadingIcon:
+                            icon: "swap-horizontal"
+
+                        MDNavigationDrawerItemText:
+                            text: "Switch to Catbox"
+
+                    ## Divider
+                    MDNavigationDrawerDivider:
+                        
+                    ## List
+                    ## All items will be here
+
+
+
+
+
+
+    ## == Settings Screen == ##
+    MDScreen:
+        name: 'settings'
+        md_bg_color: self.theme_cls.backgroundColor
+        #md_bg_color: "#FFDAAF"
+
+        ## Top bar
+        MDTopAppBar:
+            type: 'small'
+            size_hint_y: 0.1
+            pos_hint: {"center_x": 0.5, "top": 1}
+
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: 'arrow-left'
+                    on_release:
+                        root.transition.direction = "right"
+                        app.back()
+
+            MDTopAppBarTitle:
+                pos_hint: {"center_x": 0.5}
+                text: "Settings"
+            
+            MDTopAppBarTrailingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: 'github'
+                    on_release:
+                        app.github()
+
+        MDDivider:
+            thickness: dp(10)
+            pos_hint: {"center_x": 0.5, "top": 0.9}
+            size_hint_x: 1
+
+        MDDivider:
+            thickness: dp(10)
+            pos_hint: {"center_x": 0.5, "top": 0.899}
+            size_hint_x: 1
+
+
+        ## Settings text
+        MDLabel:
+            text: 'Enter your Catbox userhash code to use\nauthorized upload method'
+            padding: 0.6
+            halign: 'center'
+            pos_hint: {"center_x": 0.5, "center_y": 0.8}
+        
+        ## Code entry
+        MDBoxLayout:
+            orientation: 'horizontal'
+            size_hint_x: 0.8
+            spacing: dp(15)
+            pos_hint: {"center_x": 0.5}
+
+            ## Entry
+            MDTextField:
+                id: entry
+                mode: 'outlined'
+                size_hint_x: 0.6
+                pos_hint: {"center_x": 0.5, "center_y": 0.7}
+                password: True           
+
+                MDTextFieldHintText:
+                    text: 'Enter new userhash'
+
+                MDTextFieldLeadingIcon:
+                    icon: 'key'
+            
+            ## Save code btn
+            MDFabButton:
+                #color_map: "tertiary"
+                pos_hint: {"center_x": 0.5, "center_y": 0.7}
+                icon: "content-save-outline"
+                on_release: app.save_hash()
+
+        ## See current userhash btn
+        MDButton:
+            style: "tonal"
+            pos_hint: {"center_x": 0.5, "center_y": 0.6}
+            on_release: app.show_hash()
+            MDButtonText:
+                text: "See current userhash"
+
+        ## Info label
+        MDLabel:
+            text: 'Catbox client'
+            padding: dp(10)
+            halign: 'center'
+            pos_hint: {"center_x": 0.5, "center_y": 0.04}
+            font_style: 'Label'
+            role: 'large'
+
+        MDLabel:
+            text: 'v 1.0'
+            padding: dp(10)
+            halign: 'center'
+            pos_hint: {"center_x": 0.5, "center_y": 0.02}
+            font_style: 'Label'
+            role: 'small'
