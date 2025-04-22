@@ -1,8 +1,4 @@
 ![Logo](https://files.catbox.moe/9m319j.png)
-<p align="center">
-  <img src="https://files.catbox.moe/9m319j.png" alt="Title Image" width="600" heigh="280">
-</p>
-
 
 ⚠️**Attention**
 
