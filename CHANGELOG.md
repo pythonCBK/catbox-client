@@ -8,11 +8,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ### Will be added
 
-- More functions.
+- Mobile version (not soon)
+- The ability to upload files via a link.
+- Userhash input check.
+- Multithreading.
+- Some UI details.
+- Notifications about after uploading, deleting files.
+- Internet connection and server status checking.
+- Help page.
 
 ### Will be fixed
 
-- App crashes.
+- App crash after some actions.
+- Code structure.
 
 
 ## [1.0] - 2025-04-22
