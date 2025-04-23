@@ -156,13 +156,11 @@ MDScreenManager:
                             active: True
                             on_release:
                                 app.list_choice_upd('anon'),
-                                app.add_cb_a()
                             MDSegmentButtonLabel:
                                 text: 'Anonymous'
                         MDSegmentedButtonItem:
                             on_release:
-                                app.list_choice_upd('anon'),
-                                app.add_cb_b()
+                                app.list_choice_upd('auth'),
                             MDSegmentButtonLabel:
                                 text: 'Authorized'
 
@@ -413,7 +411,7 @@ MDScreenManager:
         MDButton:
             style: "tonal"
             pos_hint: {"center_x": 0.5, "center_y": 0.6}
-            on_release: app.show_hash()
+            on_release: app.show_hash('show')
             MDButtonText:
                 text: "See current userhash"
 
@@ -427,7 +425,7 @@ MDScreenManager:
             role: 'large'
 
         MDLabel:
-            text: 'v 1.0'
+            text: 'v 1.1'
             padding: dp(10)
             halign: 'center'
             pos_hint: {"center_x": 0.5, "center_y": 0.02}

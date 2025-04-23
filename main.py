@@ -210,15 +210,19 @@ class MainApp(MDApp):
         settings = load_settings()
         current_hash = settings['userhash']
         new_hash = self.root.ids.entry.text.strip()
+        clear_hash = new_hash.replace(" ", "")
 
-        if new_hash == current_hash:
+        if clear_hash == current_hash:
+            self.show_hash("same")
             return
         
-        if new_hash == "":
+        if clear_hash == "":
+            self.show_hash("invalid")
             return
 
-        settings['userhash'] = new_hash
+        settings['userhash'] = clear_hash
         save_settings(settings)
+        self.show_hash("update")
     
     # Copy userhash
     def copy_hash(self):
@@ -243,10 +247,15 @@ class MainApp(MDApp):
     def list_choice_upd(self, option):
         global list_to_show
 
+        if option == list_to_show:
+            return
+
         if option == "anon":
             list_to_show = "anon"
+            self.add_cb_a()
         else:
             list_to_show = "auth"
+            self.add_cb_b()
 
         print("List to show updated:", list_to_show)
 
@@ -381,7 +390,6 @@ class MainApp(MDApp):
     # Call Catbox uploads
     def upload_cb(self):
         global method
-        global list_to_show
         global file_cb
 
         if file_cb == "":
@@ -729,28 +737,87 @@ class MainApp(MDApp):
 ### === Notifications === ###
 
     # Show current userhash
-    def show_hash(self):
+    def show_hash(self, option):
         settings = load_settings()
         current_hash = settings['userhash']
 
-        if current_hash == "":
-            support_text = "No userhash provided"
-        else:
+        if option == "show":
+            if current_hash == "":
+                support_text = "No userhash provided"
+            else:
+                support_text = current_hash
+
+            show = MDSnackbar(
+                MDSnackbarText(
+                    text = "Current userhash:",
+                ),
+                MDSnackbarSupportingText(
+                    text = support_text,
+                ),
+                y=dp(10),
+                orientation="horizontal",
+                pos_hint={"center_x": 0.5},
+                size_hint_x=0.8,
+            )
+            show.open()
+        
+        if option == "update":
+            up_text = "New userhash"
             support_text = current_hash
 
-        show = MDSnackbar(
-            MDSnackbarText(
-                text = "Current userhash:",
-            ),
-            MDSnackbarSupportingText(
-                text = support_text,
-            ),
-            y=dp(10),
-            orientation="horizontal",
-            pos_hint={"center_x": 0.5},
-            size_hint_x=0.8,
-        )
-        show.open()
+            show = MDSnackbar(
+                MDSnackbarText(
+                    text = up_text,
+                ),
+                MDSnackbarSupportingText(
+                    text = support_text,
+                ),
+                y=dp(10),
+                orientation="horizontal",
+                pos_hint={"center_x": 0.5},
+                size_hint_x=0.8,
+            )
+            show.open()
+
+
+        if option == "invalid":
+            up_text = "Userhash was not updated!"
+            support_text = "Provided userhash is invalid."
+
+            show = MDSnackbar(
+                MDSnackbarText(
+                    text = up_text,
+                ),
+                MDSnackbarSupportingText(
+                    text = support_text,
+                ),
+                y=dp(10),
+                orientation="horizontal",
+                pos_hint={"center_x": 0.5},
+                size_hint_x=0.8,
+            )
+            show.open()
+
+
+        if option == "same":
+            up_text = "Userhash was not updated!"
+            support_text = "Provided userhash is the same."
+
+            show = MDSnackbar(
+                MDSnackbarText(
+                    text = up_text,
+                ),
+                MDSnackbarSupportingText(
+                    text = support_text,
+                ),
+                y=dp(10),
+                orientation="horizontal",
+                pos_hint={"center_x": 0.5},
+                size_hint_x=0.8,
+            )
+            show.open()
+
+
 
 
 MainApp().run()
