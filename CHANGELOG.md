@@ -23,6 +23,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 - Code structure.
 
 
+## [1.1]- 2025-04-23
+
+### Added
+
+- Userhash input check.
+
+### Fixed
+
+- Crash when selecting the same history list to display.
+
+
 ## [1.0] - 2025-04-22
 
 - Release of the first version of the app.
