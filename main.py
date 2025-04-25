@@ -3,21 +3,52 @@ from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.core.clipboard import Clipboard
 from kivy.metrics import dp
-#from kivymd.toast import toast
 
 from kivymd.uix.snackbar import (
     MDSnackbar,
     MDSnackbarSupportingText,
     MDSnackbarText,
 )
+
 from kivymd.uix.list import (
     MDListItem,
     MDListItemHeadlineText,
     MDListItemLeadingIcon)
 
+
+from kivy.lang import Builder
+from kivy.uix.widget import Widget
+
+from kivymd.app import MDApp
+from kivymd.uix.button import MDButton, MDButtonText
+from kivymd.uix.dialog import (
+    MDDialog,
+    MDDialogIcon,
+    MDDialogHeadlineText,
+    MDDialogSupportingText,
+    MDDialogButtonContainer,
+    MDDialogContentContainer,
+)
+
+
+from kivymd.uix.dialog import (
+    MDDialog,
+    MDDialogIcon,
+    MDDialogHeadlineText,
+    MDDialogSupportingText,
+    MDDialogButtonContainer,
+    MDDialogContentContainer,
+)
+
+from kivymd.uix.divider import MDDivider
+from kivymd.uix.list import (
+    MDListItem,
+    MDListItemLeadingIcon,
+    MDListItemSupportingText,
+)
+
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.button import MDIconButton
-
 
 import webbrowser
 import json
@@ -72,6 +103,44 @@ def list_cb_b():
         list_lb = json.load(f)
     return list_lb
 
+# Internet connection
+def ping():
+    
+    # Show dialog when there is an connection problem
+    def dialog(message):
+        dialog = MDDialog(
+            MDDialogIcon(icon="alert",),
+            MDDialogHeadlineText(text="Attention!",),
+            MDDialogSupportingText(text=message,),
+        )
+        dialog.open()
+
+    # Check connection and availability of Catbox
+    def check(url, message):
+
+        try:
+            response = requests.get(url, timeout=5)
+            if response.ok:
+                print(f'{url} pong')
+                return True
+            else:
+                raise requests.exceptions.RequestException()
+        except requests.exceptions.RequestException:
+            print(f'No connection or responce issue with {url}')
+            dialog(message)
+            return False
+    
+    # Check if user have internet connection (by google becasue it's available all time)
+    if check("https://www.google.com", 
+                    "It looks like you have connection issues! The main functions of the app will not work!"):
+
+        # Check if Catbox is available after knowing that the user is online
+        # Don't check Litterbox because it has the domain of Catbox
+        if check("https://catbox.moe", 
+                "It looks like Catbox is not available now! The main functions of the app will not work!"):
+
+            print("All systems go")
+
 
 
 ## === App === ##
@@ -107,6 +176,7 @@ class MainApp(MDApp):
         self.title = "CatBox Client" # App title
         self.add_lb()
         self.add_cb_a()
+        ping()
 
 
 
@@ -179,7 +249,7 @@ class MainApp(MDApp):
     def link(self, option):
         link = option
         Clipboard.copy(link)
-        #toast("Link copied to the clipboard")
+
         print("Link copied to the clipboard")
 
 
@@ -395,14 +465,37 @@ class MainApp(MDApp):
         if file_cb == "":
             return
         else:
-
             if method == "anon":
                 result = self.upl_anon()
                 print("Anon uploaded file:", result)
+
+                notification = MDSnackbar(
+                    MDSnackbarSupportingText(
+                        text = f"Catbox uploaded file (anon): {result}",
+                    ),
+                    y=dp(10),
+                    orientation="horizontal",
+                    pos_hint={"center_x": 0.5},
+                    size_hint_x=0.8,
+                )
+                notification.open()
+
                 self.add_list_cb_a(result)
             else:
                 result = self.upl_auth()
                 print("Auth uploaded file:", result)
+
+                notification = MDSnackbar(
+                    MDSnackbarSupportingText(
+                        text = f"Catbox uploaded file (auth): {result}",
+                    ),
+                    y=dp(10),
+                    orientation="horizontal",
+                    pos_hint={"center_x": 0.5},
+                    size_hint_x=0.8,
+                )
+                notification.open()
+
                 self.add_list_cb_b(result)
 
 
@@ -415,6 +508,18 @@ class MainApp(MDApp):
         else:
             result = self.upl_lb()
             print("Litterbox uploaded file:", result)
+
+            notification = MDSnackbar(
+                MDSnackbarSupportingText(
+                    text = f"Litterbox uploaded file: {result}",
+                ),
+                y=dp(10),
+                orientation="horizontal",
+                pos_hint={"center_x": 0.5},
+                size_hint_x=0.8,
+            )
+            notification.open()
+
             self.add_list_lb(result)
             self.add_lb()
 
@@ -446,12 +551,44 @@ class MainApp(MDApp):
             del datalist[to_remove]
         else:
             print(f"Name {to_remove} not found!")
+            return
 
         with open('list_cb_a.json', 'w', encoding='utf-8') as file:
             json.dump(datalist, file, ensure_ascii=False, indent=4)
+
         
         self.add_cb_b()
         self.add_cb_a()
+
+
+
+
+    # Remove CB-b (json)
+    def remove_cb_b_list(self, option):
+        datalist = list_cb_b()
+        to_remove = option
+
+        # Remove from .json
+        if to_remove in datalist:
+            del datalist[to_remove]
+        else:
+            print(f"Name {to_remove} not found!")
+
+        with open('list_cb_b.json', 'w', encoding='utf-8') as file:
+            json.dump(datalist, file, ensure_ascii=False, indent=4)
+
+        notification = MDSnackbar(
+                MDSnackbarText(text = "Success"),
+                MDSnackbarSupportingText(text = "File was deleted from Catbox"),
+                y=dp(10),
+                orientation="horizontal",
+                pos_hint={"center_x": 0.5},
+                size_hint_x=0.8,
+            )
+        notification.open()
+        
+        self.add_cb_a()
+        self.add_cb_b()
 
 
     # Remove CB-b
@@ -464,6 +601,18 @@ class MainApp(MDApp):
         settings = load_settings()
         userhash = settings['userhash']
         url = "https://catbox.moe/user/api.php"
+
+        def show_error():
+            message = "Could not delete file from Catbox. Check your userhash or try later."
+            notification = MDSnackbar(
+                    MDSnackbarText(text = "Error"),
+                    MDSnackbarSupportingText(text=message),
+                    y=dp(10),
+                    orientation="horizontal",
+                    pos_hint={"center_x": 0.5},
+                    size_hint_x=0.8,
+            )
+            notification.open()
 
         if to_remove in datalist:
             link = datalist[to_remove]["link"]
@@ -484,25 +633,16 @@ class MainApp(MDApp):
         
         response = requests.post(url, data=data)
 
-        # Remove from .json
-        if to_remove in datalist:
-            del datalist[to_remove]
-        else:
-            print(f"Name {to_remove} not found!")
-
-        with open('list_cb_b.json', 'w', encoding='utf-8') as file:
-            json.dump(datalist, file, ensure_ascii=False, indent=4)
-        
-        self.add_cb_a()
-        self.add_cb_b()
-        print(response)
 
         if response.status_code == 200:
             if "success" in response.text.lower():
+                self.remove_cb_b_list(option=to_remove)
                 return "File was deleted from server"
             else:
+                show_error()
                 return f"Error: {response.text}"
         else:
+            show_error()
             return f"Request error. Error code: {response.status_code}"
 
 
