@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 - Threading.
 - Some UI details.
 - Help page.
+- Make all settings and lists in one .json file.
 
 ### Will be fixed
 
