@@ -12,14 +12,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 - The ability to upload files via a link.
 - Threading.
 - Some UI details.
-- Notifications about uploading, deleting files.
-- Internet connection and server status checking.
 - Help page.
 
 ### Will be fixed
 
 - App crash after some actions.
 - Code structure.
+
+
+## [1.2]- 2025-04-25
+
+### Added
+
+- Internet connection and server status checking.
+- Notifications about uploading, deleting files.
+
+### Fixed
+
+- Code logic that could lead to errors.
 
 
 ## [1.1]- 2025-04-23
