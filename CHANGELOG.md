@@ -10,10 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 - Mobile version (not soon)
 - The ability to upload files via a link.
-- Userhash input check.
-- Multithreading.
+- Threading.
 - Some UI details.
-- Notifications about after uploading, deleting files.
+- Notifications about uploading, deleting files.
 - Internet connection and server status checking.
 - Help page.
 
@@ -31,7 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ### Fixed
 
-- Crash when selecting the same history list to display.
+- App crash when selecting the same history list to display.
 
 
 ## [1.0] - 2025-04-22
